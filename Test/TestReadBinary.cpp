@@ -77,4 +77,29 @@ int main()
 	{
 		std::cout << exception.what();
 	}
+
+	// Test Number Three, Verify the number magic of psd/psb file
+	// Assumptions: The filename point to file of type .psd/.psb
+	// 		and it is a .psd/psb file valid (aka: not corrupted).
+	try
+	{
+		// Change the extension of filename (here) to .psd or .psb
+		std::vector dataBinary = Properties::Readable::readBinary("../Test/Images/Format.psd");
+
+		// Wikipedia say that signature of .psd/.psb is 8BPS
+		std::vector numberMagic(dataBinary.cbegin(), dataBinary.cbegin() + 4);
+
+		// The values in hexadecimal are: 38 42 50 53 for the signature 8BPS
+
+		assert(numberMagic[0] == std::byte(0x38));
+		assert(numberMagic[1] == std::byte(0x42));
+		assert(numberMagic[2] == std::byte(0x50));
+		assert(numberMagic[3] == std::byte(0x53));
+
+		std::cout << "Test Success, PSD/PSB Verify.\n";
+	}
+	catch (std::exception& exception)
+	{
+		std::cout << exception.what();
+	}
 }
