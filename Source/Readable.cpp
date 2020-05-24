@@ -7,11 +7,6 @@ using namespace Cup;
 
 namespace fs = std::filesystem;
 
-std::string Properties::Readable::readSimple(std::string_view filename)
-{
-	return std::string();
-}
-
 std::vector<char> Properties::Readable::readBinary(std::string_view filename)
 {
 	// Get the absolute path to file, is more simple
