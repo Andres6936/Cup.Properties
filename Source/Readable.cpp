@@ -1,4 +1,6 @@
 #include "Cup/Properties/Readable.h"
+
+#include <vector>
 #include <memory>
 #include <fstream>
 #include <filesystem>
@@ -7,7 +9,7 @@ using namespace Cup;
 
 namespace fs = std::filesystem;
 
-std::vector<char> Properties::Readable::readBinary(std::string_view filename)
+std::vector<std::byte> Properties::Readable::readBinary(std::string_view filename)
 {
 	// Get the absolute path to file, is more simple
 	// inform of error with the absolute path.
@@ -41,19 +43,34 @@ std::vector<char> Properties::Readable::readBinary(std::string_view filename)
 			// of the file
 			inputStream.seekg(0, std::ifstream::beg);
 
-			std::unique_ptr<char[]> buffer = std::make_unique<char[]>(sizeFile);
+			// std::byte was introduced in C++17, allowing
+			// interpret unsigned char and char as a byte
 
-			inputStream.read(buffer.get(), sizeFile);
+			// See the motivations of use std::byte instead
+			// of unsigned char and char
 
-			// Automatic template deduction to char <C++17>
-			// Note that the second argument is an "end pointer",
-			// very common in C++. Importantly, it is a pointer
-			// to the character after the end of the buffer, not
-			// the last character in the buffer.
-			// In other words, the start is inclusive but the
-			// end is exclusive.
-			// Ref: https://stackoverflow.com/a/4272524
-			return std::vector(buffer.get(), buffer.get() + sizeFile);
+			// 		Many programs require byte-oriented access
+			// 		to memory. Today, such programs must use
+			// 		either the char, signed char, or unsigned
+			// 		char types for this purpose. However, these
+			// 		types perform a “triple duty”. Not only are
+			// 		they used for byte addressing, but also as
+			// 		arithmetic types, and as character types.
+			// 		This multiplicity of roles opens the door
+			// 		for programmer error – such as accidentally
+			// 		performing arithmetic on memory that should
+			// 		be treated as a byte value – and confusion
+			// 		for both programmers and tools.
+			// Ref: http://open-std.org/JTC1/SC22/WG21/docs/papers/2016/p0298r0.pdf
+			std::vector<std::byte> buffer(sizeFile);
+
+			// The "reinterpret_cast<char*>" is necessary,
+			// yet that the method read not support to read
+			// of std::byte type, only of pointers (aka: arrays)
+			// of type char
+			inputStream.read(reinterpret_cast<char*>(buffer.data()), sizeFile);
+
+			return buffer;
 		}
 	}
 	else
@@ -67,8 +84,8 @@ std::vector<char> Properties::Readable::readBinary(std::string_view filename)
 
 		const std::string pathAbsolute = path;
 		const std::string message = "The file with path <"s
-				+ pathAbsolute + "> not exist, not is a regular file"
-				+ " or the path is wrong.\nPlease assure that path is"
+				+ pathAbsolute + "> not exist, not is a regular file"s
+				+ " or the path is wrong.\nPlease assure that path is"s
 				+ " valid and the file not is a directory."s;
 
 		throw std::runtime_error(message);

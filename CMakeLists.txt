@@ -14,3 +14,9 @@ TARGET_INCLUDE_DIRECTORIES(Cup
         PRIVATE
             # Used for the .cpp for avoid include from root
             Include/)
+
+
+ADD_EXECUTABLE(ReadBinary Test/TestReadBinary.cpp)
+SET_TARGET_PROPERTIES(ReadBinary PROPERTIES CXX_STANDARD 17)
+TARGET_INCLUDE_DIRECTORIES(ReadBinary PRIVATE Include/)
+TARGET_LINK_LIBRARIES(ReadBinary PRIVATE Cup)

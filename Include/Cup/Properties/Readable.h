@@ -11,7 +11,7 @@ namespace Cup::Properties
 
 	public:
 
-		static std::vector<char> readBinary(std::string_view filename);
+		static std::vector<std::byte> readBinary(std::string_view filename);
 
 	};
 }
