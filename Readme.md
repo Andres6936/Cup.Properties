@@ -30,12 +30,12 @@ Package Manager). Add it to your project, for example, under the
 Include(CMakeModules/CPM.cmake)
 
 CPMAddPackage(
-  NAME Cup
+  NAME Cup.Properties
   VERSION 2020.523
-  GITHUB_REPOSITORY Andres6936/Cup
+  GITHUB_REPOSITORY Andres6936/Cup.Properties
 )
  
-TARGET_LINK_LIBRARIES(<TARGET> PRIVATE Cup)
+TARGET_LINK_LIBRARIES(<TARGET> PRIVATE Cup.Properties)
 ```
 
 My proposal for using the library within your code is to use 
