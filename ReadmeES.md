@@ -49,3 +49,15 @@ class MyClass : private Properties::Readable
 ....
 }
 ```
+
+La herencia desde mi perspectiva a de ser privada, porque oculta 
+los métodos heredados de la clase `Readable` a otras clases que NO se
+deriven directamente de esta.
+
+<p align="center">
+    <img src="Documentation/Inheritance Good.png" alt="Good"/>
+</p>
+
+<p align="center">
+    <img src="Documentation/Inheritance Bad.png" alt="Bad"/>
+</p>
