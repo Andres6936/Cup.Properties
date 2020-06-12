@@ -49,3 +49,16 @@ class MyClass : private Properties::Readable
 ....
 }
 ```
+
+The inheritance from my perspective has to be private, because it hides 
+the methods inherited from the 'Readable' class to other classes that are NOT
+derive directly from this one.
+
+<p align="center">
+    <img src="Documentation/Inheritance Good.png" alt="Good"/>
+</p>
+
+<p align="center">
+    <img src="Documentation/Inheritance Bad.png" alt="Bad"/>
+</p>
+
